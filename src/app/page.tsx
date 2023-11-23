@@ -3,15 +3,8 @@ import Link from "next/link";
 import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { css } from '../../styled-system/css';
-
-export default function Home() {
-  return (
-    <div className={css({ fontSize: "2xl", fontWeight: 'bold' })}>Hello 🐼!</div>
-  )
-}
-
-export  async function Home2() {
+import { css } from "../../styled-system/css";
+export default async function Home() {
   const hello = await api.post.hello.query({ text: "from tRPC" });
   const session = await getServerAuthSession();
 
