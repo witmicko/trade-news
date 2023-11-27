@@ -13,18 +13,18 @@ import { sql } from "drizzle-orm";
 export const tickers = sqliteTable(
   "tickers",
   {
-    ...timestamps,
-    id: id,
+    ticker: text("ticker").primaryKey(),
+    name: text("name").notNull(),
+    // id: id,
+    country: text("country").notNull(),
+    sector: text("sector"),
+    industry: text("industry"),
     type: text("type", {
       enum: ["stock", "crypto", "forex", "commodity"],
     }).notNull(),
-    country: text("country").notNull(),
-    industry: text("industry"),
-    sector: text("sector"),
     ipoDate: integer("ipo_date", { mode: "timestamp" }),
-    ticker: text("ticker").notNull(),
     exchange: text("exchange"),
-    name: text("name").notNull(),
+    ...timestamps,
   },
   (table) => ({
     tickerExchangeIdx: unique("ticker_exchange_idx").on(

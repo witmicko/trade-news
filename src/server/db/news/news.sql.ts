@@ -34,12 +34,12 @@ export const news = sqliteTable("news", {
   type: text("type")
     .references(() => newsTypes.name)
     .notNull(),
-  topics: text("topics")
-    .references(() => topics.name)
-    .notNull(),
-  tickers: text("tickers")
-    .references(() => tickers.ticker)
-    .notNull(),
+  // topics: text("topics")
+  //   .references(() => topics.name)
+  //   .notNull(),
+  // tickers: text("tickers")
+  //   .references(() => tickers.ticker)
+  //   .notNull(),
 });
 
 export const newsToTickers = sqliteTable(
@@ -49,7 +49,7 @@ export const newsToTickers = sqliteTable(
     ticker: integer("ticker").references(() => tickers.ticker),
   },
   (table) => ({
-    pk: primaryKey(table.ticker, table.news),
+    pk: primaryKey({ columns: [table.ticker, table.news] }),
   }),
 );
 
@@ -60,51 +60,51 @@ export const newsToTopics = sqliteTable(
     topic: text("topic").references(() => topics.name),
   },
   (table) => ({
-    pk: primaryKey(table.topic, table.news),
+    pk: primaryKey({ columns: [table.topic, table.news] }),
   }),
 );
 
 // RELATIONS
-export const topicsRelations = relations(topics, ({ many }) => ({
-  news: many(newsToTopics),
-}));
+// export const topicsRelations = relations(topics, ({ many }) => ({
+//   news: many(newsToTopics),
+// }));
 
-export const newsTypesRelations = relations(newsTypes, ({ many }) => ({
-  news: many(news),
-}));
+// export const newsTypesRelations = relations(newsTypes, ({ many }) => ({
+//   news: many(news),
+// }));
 
-export const newsToTickersRelations = relations(
-  newsToTickers,
-  ({ one, many }) => ({
-    news: one(news, {
-      fields: [newsToTickers.news],
-      references: [news.id],
-    }),
-    ticker: one(tickers, {
-      fields: [newsToTickers.ticker],
-      references: [tickers.id],
-    }),
-  }),
-);
+// export const newsToTickersRelations = relations(
+//   newsToTickers,
+//   ({ one, many }) => ({
+//     news: one(news, {
+//       fields: [newsToTickers.news],
+//       references: [news.id],
+//     }),
+//     ticker: one(tickers, {
+//       fields: [newsToTickers.ticker],
+//       references: [tickers.id],
+//     }),
+//   }),
+// );
 
-export const newsToTopicsRelations = relations(
-  newsToTopics,
-  ({ one, many }) => ({
-    news: one(news, {
-      fields: [newsToTopics.news],
-      references: [news.id],
-    }),
-    topic: one(topics, {
-      fields: [newsToTopics.topic],
-      references: [topics.name],
-    }),
-  }),
-);
-export const tickersRelations = relations(tickers, ({ many }) => ({
-  news: many(news),
-}));
+// export const newsToTopicsRelations = relations(
+//   newsToTopics,
+//   ({ one, many }) => ({
+//     news: one(news, {
+//       fields: [newsToTopics.news],
+//       references: [news.id],
+//     }),
+//     topic: one(topics, {
+//       fields: [newsToTopics.topic],
+//       references: [topics.name],
+//     }),
+//   }),
+// );
+// export const tickersRelations = relations(tickers, ({ many }) => ({
+//   news: many(news),
+// }));
 
-export const newsRelations = relations(news, ({ many }) => ({
-  tickersToNews: many(newsToTickers),
-  topicsToNews: many(newsToTopics),
-}));
+// export const newsRelations = relations(news, ({ many }) => ({
+//   tickersToNews: many(newsToTickers),
+//   topicsToNews: many(newsToTopics),
+// }));

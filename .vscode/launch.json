@@ -2,6 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "tsx",
+      "type": "node",
+      "request": "launch",
+      "envFile": "${workspaceFolder}/.env",
+      "args": [
+        "${relativeFile}"
+      ],
+      "runtimeArgs": [
+        "--require",
+        "tsx/suppress-warnings",
+        "--loader",
+        "tsx",
+      ],
+      "cwd": "${workspaceFolder}",
+      "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",

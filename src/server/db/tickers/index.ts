@@ -4,7 +4,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type z } from "zod";
 import { tickers } from "./tickers.sql";
 import { db } from "../../db";
-
+import { isValid } from "date-fns";
 // Schema for selecting a user - can be used to validate API responses
 const Info = createSelectSchema(tickers);
 export type Info = z.infer<typeof Info>;
@@ -12,7 +12,7 @@ export type Info = z.infer<typeof Info>;
 // Overriding the fields
 const insertTickerSchema = createInsertSchema(tickers);
 
-interface TickerJson {
+export interface TickerJson {
   ticker: string;
   name: string;
   country: string;
@@ -24,11 +24,13 @@ interface TickerJson {
 }
 
 export const fromJson = (json: TickerJson) => {
-  const ipoDate = new Date(json.ipo_date ?? "1970-01-01");
+  const ipoDate = new Date(json.ipo_date!);
+  const { has_news, ipo_date, ...rest } = json;
+
   try {
     const ticker = {
-      ...json,
-      ipoDate,
+      ...rest,
+      ipoDate: isValid(ipoDate) ? ipoDate : new Date("1970-01-01"),
       type: "stock",
     };
     return insertTickerSchema.parse(ticker) as Info;

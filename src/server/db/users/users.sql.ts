@@ -23,8 +23,8 @@ export const posts = sqliteTable(
   "post",
   {
     id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name", { length: 256 }),
-    authorId: integer("author_id")
+    name: text("name"),
+    createdById: text("createdById")
       .notNull()
       .references(() => users.id),
     createdAt: integer("created_at", { mode: "timestamp" }).default(
@@ -35,7 +35,7 @@ export const posts = sqliteTable(
     ),
   },
   (example) => ({
-    authorIndex: index("createdById_idx").on(example.authorId),
+    createdByIdIdx: index("createdById_idx").on(example.createdById),
     nameIndex: index("name_idx").on(example.name),
   }),
 );

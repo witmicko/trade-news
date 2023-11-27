@@ -119,7 +119,7 @@ export const create = async (newsOptions: NewsOptions) => {
   for (const t of existingTickers) {
     await db
       .insert(newsToTickers)
-      .values({ news: instertedNews.insertedId, ticker: t.id })
+      .values({ news: instertedNews.insertedId, ticker: t.ticker })
       .execute();
   }
 
